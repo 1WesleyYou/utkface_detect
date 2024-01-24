@@ -46,6 +46,7 @@ class ImageDataset(Dataset):
             model_age = filename[:age_r]
             rest_name = filename[age_r + 1:]
             model_gender = rest_name[:rest_name.find('_')]
+            # print(f"age: {model_age}, gender: {model_gender}")
             data.append({'image_path': os.path.join(f'dataset/train/part2/{filename}'),
                          'label': (model_age, model_gender)})  # 获取 label 保存为一个元组
 
