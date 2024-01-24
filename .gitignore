@@ -1,3 +1,6 @@
 # 内容是项目配置文件
 .idea/
 .vscode/
+
+# 数据集不上传
+dataset/
