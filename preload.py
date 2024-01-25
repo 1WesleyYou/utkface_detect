@@ -49,10 +49,9 @@ class ImageDataset(Dataset):
         return len(self.data)
 
     def __getitem__(self, idx):
-        print(self.data[idx])
         img_path = self.data[idx]['image_path']
         label = torch.tensor(self.data[idx]['label'])
-        image = Image.open(img_path).convert('L')
+        image = Image.open(img_path)  # .convert('L')
 
         if self.transform:
             image = self.transform(image)
