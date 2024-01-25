@@ -44,4 +44,7 @@ class AgeGenderDetectNN(nn.Module):
         # gender 输出的应该是性别为 男0 的概率, 因此需要考虑使用激活函数，同时由于是二元分类，我们采用最简单的 sigmoid 函数就好
         gender = torch.sigmoid(gender)
 
+        age = age.view(-1)
+        gender = gender.view(-1)
+
         return age, gender
