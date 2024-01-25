@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 class AgeGenderDetectNN(nn.Module):
-    def __int__(self):
+    def __init__(self):
         super(AgeGenderDetectNN, self).__init__()
         self.age_detect_model = nn.Sequential(
             # 年纪检测
@@ -22,7 +22,6 @@ class AgeGenderDetectNN(nn.Module):
         )
 
         self.gender_fc1 = nn.Linear(128 * 64 * 64, 64)
-        self.gender_fc2 = nn.Linear(64, 110)  # 最高寿的人是 110
         self.age_fc1 = nn.Linear(128 * 64 * 64, 64)
         self.age_fc2 = nn.Linear(64, 1)  # 做回归任务不用激活
 
