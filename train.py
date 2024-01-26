@@ -1,4 +1,4 @@
-from preload import train_loader
+from preload import train_loader, test_loader
 from model import AgeGenderDetectNN
 import torch
 import torch.nn as nn
@@ -31,6 +31,10 @@ for epochs in range(epoch_num):
 
         age_output, gender_output = model(input_image)
         age_loss = age_criterion(age_output, label_age)
+        if max(gender_output) > 1:
+            print(max(gender_output))
+        if max(label_gender) > 1:
+            print(max(label_gender))
         gender_loss = gender_criterion(gender_output, label_gender)
 
         age_loss.backward()
@@ -40,5 +44,18 @@ for epochs in range(epoch_num):
         gender_optimizer.step()
         print(idx)
 
-        if idx % 100 == 1:
-            print(f'case [{epochs + 1}/10], loss of age = {age_loss.item()}, loss of gender = {gender_loss.item()}')
+        if idx % 100 == 1 & idx > 100:
+            print(f'case [{epochs}/21], loss of age = {age_loss.item()}, loss of gender = {gender_loss.item()}')
+
+model.eval()
+correct = 0
+total = 0
+with torch.no_grad():  # 关闭梯度计算，提高代码执行效率
+    for data in test_loader:
+        images, labels = data
+        outputs = model(images)
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
+print(f'Accuracy: {100 * correct / total}%')
