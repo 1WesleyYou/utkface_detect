@@ -36,6 +36,8 @@ class ImageDataset(Dataset):
             model_age = filename[:age_r]
             rest_name = filename[age_r + 1:]
             model_gender = int(rest_name[:rest_name.find('_')])
+            if model_gender > 1:
+                print(f'error in part1:{filename}')
             data.append({'image_path': os.path.join(f'dataset/train/part1/{filename}'),
                          'label': (int(model_age), model_gender)})  # 获取 label
             self.train_size += 1
@@ -46,6 +48,8 @@ class ImageDataset(Dataset):
             model_age = filename[:age_r]
             rest_name = filename[age_r + 1:]
             model_gender = int(rest_name[:rest_name.find('_')])
+            if model_gender > 1:
+                print(f'error in part2:{filename}')
             # print(f"age: {model_age}, gender: {model_gender}")
             data.append({'image_path': os.path.join(f'dataset/train/part2/{filename}'),
                          'label': (int(model_age), model_gender)})  # 获取 label 保存为一个元组
@@ -62,10 +66,12 @@ class ImageDataset(Dataset):
     def __getitem__(self, idx):
         img_path = self.data[idx]['image_path']
         label = torch.tensor(self.data[idx]['label'])
-        image = Image.open(img_path)  # .convert('L')
+        image = Image.open(img_path).convert('RGB')  # 强制将图片颜色变成rgb三色
 
         if self.transform:
             image = self.transform(image)
+            if image.size(0) != 3:
+                print(image.size())
 
         return {'image_path': image, 'label': label}
 
