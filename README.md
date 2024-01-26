@@ -10,3 +10,19 @@
 ## 数据集的问题
 
 数据集中part2有个照片名称多打了一个 `_`即`53__0_20170116184028385.jpg`, 请注意消除之
+
+## 数据集优化
+
+为了满足让模型能够识别更加抽象的人脸，我们使用 `transforms` 的内置功能进行数据集预处理，具体函数如下
+
+```python
+import torchvision.transforms as transforms
+transforms.Compose([ 
+    transforms.RandomHorizontalFlip(),  # 随机水平翻转
+    transforms.RandomRotation(degrees=15),  # 随机旋转图像
+    transforms.ColorJitter(brightness=0.2, contrast=0.2),  # 随机调整亮度和对比度
+    transforms.RandomResizedCrop(size=(256, 256)),  # 随机裁剪和缩放
+    transforms.ToTensor()
+ ])
+
+```
