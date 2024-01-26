@@ -6,9 +6,11 @@ from PIL import Image
 
 # 定义 transform 内容
 transform = transforms.Compose([
-    transforms.Resize([256, 256]),  # 重新设定图像大小
+    transforms.RandomHorizontalFlip(),  # 随机水平翻转
+    transforms.RandomRotation(degrees=15),  # 随机旋转图像
+    transforms.ColorJitter(brightness=0.2, contrast=0.2),  # 随机调整亮度和对比度
+    transforms.RandomResizedCrop(size=(256, 256)),  # 随机裁剪和缩放
     transforms.ToTensor(),
-    # transforms.Normalize(mean=[0.5], std=[0.5])
 ])
 
 
