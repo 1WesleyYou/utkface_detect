@@ -13,38 +13,54 @@ transform = transforms.Compose([
     transforms.ToTensor(),
 ])
 
+test_transform = transforms.Compose([
+    transforms.Resize(size=(256, 256)),
+    transforms.ToTensor()
+])
+
 
 # 定义数据集获取类
 class ImageDataset(Dataset):
     def __init__(self, transform_model=None):
         self.transform = transform_model
-        self.data = self.load_data()
+        self.data = self.load_data('train')
+        self.test = self.load_data('test')
 
-    def load_data(self):
+    def load_data(self, mode):
         # 初始化空数据集
         data = []
+        if mode == 'train':
+            # 训练集读取
+            for filename in os.listdir('dataset/train/part1'):
+                age_r = filename.find('_')
+                model_age = filename[:age_r]
+                rest_name = filename[age_r + 1:]
+                model_gender = int(rest_name[:rest_name.find('_')])
+                data.append({'image_path': os.path.join(f'dataset/train/part1/{filename}'),
+                             'label': (int(model_age), model_gender)})  # 获取 label
 
-        # 训练集读取
-        for filename in os.listdir('dataset/train/part1'):
-            age_r = filename.find('_')
-            model_age = filename[:age_r]
-            rest_name = filename[age_r + 1:]
-            model_gender = int(rest_name[:rest_name.find('_')])
-            data.append({'image_path': os.path.join(f'dataset/train/part1/{filename}'),
-                         'label': (int(model_age), model_gender)})  # 获取 label
+            # 训练集读取
+            for filename in os.listdir('dataset/train/part2'):
+                age_r = filename.find('_')
+                model_age = filename[:age_r]
+                rest_name = filename[age_r + 1:]
+                model_gender = int(rest_name[:rest_name.find('_')])
+                # print(f"age: {model_age}, gender: {model_gender}")
+                data.append({'image_path': os.path.join(f'dataset/train/part2/{filename}'),
+                             'label': (int(model_age), model_gender)})  # 获取 label 保存为一个元组
 
-        # 训练集读取
-        for filename in os.listdir('dataset/train/part2'):
-            age_r = filename.find('_')
-            model_age = filename[:age_r]
-            rest_name = filename[age_r + 1:]
-            model_gender = int(rest_name[:rest_name.find('_')])
-            # print(f"age: {model_age}, gender: {model_gender}")
-            data.append({'image_path': os.path.join(f'dataset/train/part2/{filename}'),
-                         'label': (int(model_age), model_gender)})  # 获取 label 保存为一个元组
+            # print(data[1000]['label'])
+            return data
+        else:
+            for filename in os.listdir('dataset/test/part3'):
+                age_r = filename.find('_')
+                model_age = filename[:age_r]
+                rest_name = filename[age_r + 1:]
+                model_gender = int(rest_name[:rest_name.find('_')])
+                data.append({'image_path': os.path.join(f'dataset/test/part3/{filename}'),
+                             'label': (int(model_age), model_gender)})  # 获取 label 保存为一个元组
 
-        # print(data[1000]['label'])
-        return data
+            return data
 
     def __len__(self):
         # 获取数据集的尺寸（返回文件个数）
@@ -63,3 +79,6 @@ class ImageDataset(Dataset):
 
 train_dataset = ImageDataset(transform)
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)  # 这里的 batch_size 是批次处理的数据量，根据电脑性能自己定
+
+test_dataset = ImageDataset(test_transform)
+test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
