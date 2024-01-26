@@ -1,6 +1,7 @@
 # 内容是项目配置文件
 .idea/
 .vscode/
+__pycache__/
 
 # 数据集不上传
 dataset/
