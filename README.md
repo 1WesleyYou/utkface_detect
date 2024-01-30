@@ -1,5 +1,11 @@
 # 面部年龄和性别检测
 
+## 数据集链接
+
+[点这里](https://drive.google.com/drive/folders/1HROmgviy4jUUUaCdvvrQ8PcqtNg2jn3G) 获取谷歌网盘下载地址
+
+[点这里](https://susanqq.github.io/UTKFace/) 获取UTKFace数据集网站
+
 ## 任务特点
 
 我们首先要在训练的时候同时训练两个独立特征，这就需要 tuple 的思路了
@@ -25,5 +31,4 @@ transforms.Compose([
     transforms.RandomResizedCrop(size=(256, 256)),  # 随机裁剪和缩放
     transforms.ToTensor()
  ])
-
 ```

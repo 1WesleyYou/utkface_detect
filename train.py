@@ -44,7 +44,7 @@ for epochs in range(epoch_num):
         gender_optimizer.step()
         print(idx)
 
-        if idx % 100 == 1 & idx > 100:
+        if idx % 100 == 1:
             print(f'case [{epochs}/21], loss of age = {age_loss.item()}, loss of gender = {gender_loss.item()}')
 
 model.eval()
